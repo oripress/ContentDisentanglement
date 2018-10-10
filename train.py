@@ -77,6 +77,7 @@ def train(args):
     disc = disc.train()
 
     while True:
+        print('Started training...')
         domA_loader = torch.utils.data.DataLoader(domA_train, batch_size=args.bs,
                                                   shuffle=True, num_workers=6)
         domB_loader = torch.utils.data.DataLoader(domB_train, batch_size=args.bs,
@@ -128,23 +129,23 @@ def train(args):
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(disc_params, 5)
-                disc_optimizer.step()
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(disc_params, 5)
+            disc_optimizer.step()
 
             if _iter % args.progress_iter == 0:
                 print('Outfile: %s <<>> Iteration %d' % (args.out, _iter))
 
-            e1 = e1.eval()
-            e2 = e2.eval()
-            decoder = decoder.eval()
-
             if _iter % args.display_iter == 0:
+                e1 = e1.eval()
+                e2 = e2.eval()
+                decoder = decoder.eval()
+
                 save_imgs(args, e1, e2, decoder)
 
-            e1 = e1.train()
-            e2 = e2.train()
-            decoder = decoder.train()
+                e1 = e1.train()
+                e2 = e2.train()
+                decoder = decoder.train()
 
             if _iter % args.save_iter == 0:
                 save_file = os.path.join(args.out, 'checkpoint')
