@@ -23,6 +23,9 @@ def train(args):
     if args.disclr != 0.0002:
         args.out = args.out + '_disclr_' + str(args.disclr)
 
+    if not os.path.exists(args.out):
+        os.makedirs(args.out)
+
     _iter = 0
 
     comp_transform = transforms.Compose([
@@ -174,6 +177,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if not os.path.exists(args.out):
-        os.makedirs(args.out)
     train(args)
