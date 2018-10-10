@@ -26,10 +26,10 @@ bash celeba_downloader.sh
 Your data directory should have the following format:
 ```
 data/
-     trainA/
-     trainB/
-     testA/
-     testB/
+     trainA.text
+     trainB.text
+     testA.text
+     testB.text
 ```
 Contrary to the paper, A is the larger set, for example, A is people with glasses and B is people without.
 You can use the provided script ```preprocess.py``` to split celebA into the above format (with A and B based on the attribute of your choosing).

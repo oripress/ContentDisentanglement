@@ -113,4 +113,5 @@ class Disc(nn.Module):
     def forward(self, net):
         net = net.view(-1, (512 - self.sep) * self.size * self.size)
         net = self.classify(net)
+        net = net.view(-1)
         return net
