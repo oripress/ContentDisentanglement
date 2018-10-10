@@ -18,10 +18,10 @@ def train(args):
     args.out = args.out + '_size_' + str(args.resize)
     if args.sep > 0:
         args.out = args.out + '_sep_' + str(args.sep)
-    if args.disc_weight > 0:
-        args.out = args.out + '_disc-weight_' + str(args.disc_weight)
-    if args.disc_lr != 0.0002:
-        args.out = args.out + '_disc-lr_' + str(args.disc_lr)
+    if args.discweight > 0:
+        args.out = args.out + '_discweight_' + str(args.discweight)
+    if args.disclr != 0.0002:
+        args.out = args.out + '_disclr_' + str(args.disclr)
 
     _iter = 0
 
@@ -65,7 +65,7 @@ def train(args):
     ae_optimizer = optim.Adam(ae_params, lr=args.lr, betas=(0.5, 0.999))
 
     disc_params = disc.parameters()
-    disc_optimizer = optim.Adam(disc_params, lr=args.disc_lr, betas=(0.5, 0.999))
+    disc_optimizer = optim.Adam(disc_params, lr=args.disclr, betas=(0.5, 0.999))
 
     if args.load != '':
         save_file = os.path.join(args.load, 'checkpoint')
@@ -108,16 +108,16 @@ def train(args):
 
             loss = mse(A_decoding, domA_img) + mse(B_decoding, domB_img)
 
-            if args.disc_weight > 0:
+            if args.discweight > 0:
                 preds_A = disc(A_common)
                 preds_B = disc(B_common)
-                loss += args.disc_weight * (bce(preds_A, B_label) + bce(preds_B, B_label))
+                loss += args.discweight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(ae_params, 5)
             ae_optimizer.step()
 
-            if args.disc_weight > 0:
+            if args.discweight > 0:
                 disc_optimizer.zero_grad()
 
                 A_common = e1(domA_img)
@@ -163,8 +163,8 @@ if __name__ == '__main__':
     parser.add_argument('--resize', type=int, default=128)
     parser.add_argument('--crop', type=int, default=178)
     parser.add_argument('--sep', type=int, default=25)
-    parser.add_argument('--disc_weight', type=float, default=0.001)
-    parser.add_argument('--disc_lr', type=float, default=0.0002)
+    parser.add_argument('--discweight', type=float, default=0.001)
+    parser.add_argument('--disclr', type=float, default=0.0002)
     parser.add_argument('--num_display', type=int, default=12)
     parser.add_argument('--progress_iter', type=int, default=100)
     parser.add_argument('--display_iter', type=int, default=500)
