@@ -123,8 +123,7 @@ def get_test_imgs(args):
     domB_test_loader = torch.utils.data.DataLoader(domB_test, batch_size=64,
                                                    shuffle=False, num_workers=6)
 
-    for _, data in enumerate(domA_test_loader):
-        domA_img, _ = data
+    for domA_img in enumerate(domA_test_loader):
         domA_img = Variable(domA_img)
         if torch.cuda.is_available():
             domA_img = domA_img.cuda()
@@ -132,8 +131,7 @@ def get_test_imgs(args):
         domA_img = domA_img[:]
         break
 
-    for _, data in enumerate(domB_test_loader):
-        domB_img, _ = data
+    for domB_img in enumerate(domB_test_loader):
         domB_img = Variable(domB_img)
         if torch.cuda.is_available():
             domB_img = domB_img.cuda()
