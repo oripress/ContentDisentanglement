@@ -174,5 +174,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not os.path.exists(args.out):
-        os.makedirs(args.out, exist_ok=True)
+        os.makedirs(args.out)
     train(args)
