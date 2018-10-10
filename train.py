@@ -36,8 +36,8 @@ def train(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_train = dset.CustomDataset(root=os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
-    domB_train = dset.CustomDataset(root=os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
+    domA_train = CustomDataset(root=os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
+    domB_train = CustomDataset(root=os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
