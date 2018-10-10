@@ -79,8 +79,8 @@ def train(args):
     decoder = decoder.train()
     disc = disc.train()
 
+    print('Started training...')
     while True:
-        print('Started training...')
         domA_loader = torch.utils.data.DataLoader(domA_train, batch_size=args.bs,
                                                   shuffle=True, num_workers=6)
         domB_loader = torch.utils.data.DataLoader(domB_train, batch_size=args.bs,
