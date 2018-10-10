@@ -112,7 +112,7 @@ if __name__=='__main__':
     trainA = allA[args.num_test_imgs:]
     trainB = allB[args.num_test_imgs:]
 
-    all_imgs = os.listdir(args.celeba_root)
+    all_imgs = os.listdir(args.root)
 
     for _img in testA:
         src = os.path.join(args.root, _img)
