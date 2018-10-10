@@ -13,6 +13,7 @@ from data import CustomImageFolder
 
 import argparse
 
+
 def train(args):
     args.out = args.out + '_size_' + str(args.resize)
     if args.sep > 0:
@@ -151,6 +152,7 @@ def train(args):
 
             _iter += 1
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataroot', default='')
@@ -171,7 +173,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if not os.path.exists(args.out):
-        os.mkdir(args.out)
-
+    os.mkdir(args.out, exist_ok=True)
     train(args)
