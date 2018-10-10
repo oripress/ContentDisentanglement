@@ -173,5 +173,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    os.mkdir(args.out, exist_ok=True)
+    os.makedirs(args.out, exist_ok=True)
     train(args)
