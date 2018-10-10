@@ -7,7 +7,7 @@ Some of the code is also based on the implementations of [MUNIT](https://github.
 <img src="images/gls_mat.png" width="600px">
 
 ## Prerequisites
-- Python 2.7
+- Python 2.7 / 3.6
 - Pytorch 0.4
 - [argparse](https://docs.python.org/2/howto/argparse.html)
 - [shutil](https://docs.python.org/2/library/shutil.html)

@@ -115,28 +115,30 @@ if __name__ == '__main__':
 
     all_imgs = os.listdir(args.root)
 
-    print('Starting to copy files...')
+    with open(os.path.join(args.dest, 'testA.txt'), 'w') as f:
+        for i, _img in enumerate(testA):
+            if i == len(testA)-1:
+                f.write("%s" % os.path.join(args.root, _img))
+            else:
+                f.write("%s\n" % os.path.join(args.root, _img))
 
-    for _img in testA:
-        src = os.path.join(args.root, _img)
-        dst = os.path.join(args.dest, 'testA', _img)
-        copyfile(src, dst)
-    print('Finished preparing testA')
+    with open(os.path.join(args.dest, 'testB.txt'), 'w') as f:
+        for i, _img in enumerate(testB):
+            if i == len(testB)-1:
+                f.write("%s" % os.path.join(args.root, _img))
+            else:
+                f.write("%s\n" % os.path.join(args.root, _img))
 
-    for _img in testB:
-        src = os.path.join(args.root, _img)
-        dst = os.path.join(args.dest, 'testB', _img)
-        copyfile(src, dst)
-    print('Finished preparing testB')
+    with open(os.path.join(args.dest, 'trainA.txt'), 'w') as f:
+        for i, _img in enumerate(trainA):
+            if i == len(trainA)-1:
+                f.write("%s" % os.path.join(args.root, _img))
+            else:
+                f.write("%s\n" % os.path.join(args.root, _img))
 
-    for _img in trainA:
-        src = os.path.join(args.root, _img)
-        dst = os.path.join(args.dest, 'trainA', _img)
-        copyfile(src, dst)
-    print('Finished preparing trainA')
-
-    for _img in trainB:
-        src = os.path.join(args.root, _img)
-        dst = os.path.join(args.dest, 'trainB', _img)
-        copyfile(src, dst)
-    print('Finished preparing trainB')
+    with open(os.path.join(args.dest, 'trainB.txt'), 'w') as f:
+        for i, _img in enumerate(trainB):
+            if i == len(trainB)-1:
+                f.write("%s" % os.path.join(args.root, _img))
+            else:
+                f.write("%s\n" % os.path.join(args.root, _img))

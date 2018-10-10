@@ -4,9 +4,12 @@ import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
+import torch.utils.data as data
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
+
+from PIL import Image
 
 
 def save_imgs(args, e1, e2, decoder):
@@ -112,8 +115,8 @@ def get_test_imgs(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_test = dset.ImageFolder(root=os.path.join(args.root, 'testA'), transform=comp_transform)
-    domB_test = dset.ImageFolder(root=os.path.join(args.root, 'testB'), transform=comp_transform)
+    domA_test = dset.CustomDataset(root=os.path.join(args.root, 'testA.txt'), transform=comp_transform)
+    domB_test = dset.CustomDataset(root=os.path.join(args.root, 'testB.txt'), transform=comp_transform)
 
     domA_test_loader = torch.utils.data.DataLoader(domA_test, batch_size=64,
                                                    shuffle=False, num_workers=6)
@@ -172,6 +175,49 @@ def load_model_for_eval(load_path, e1, e2, decoder, ):
     e2.load_state_dict(state['e2'])
     decoder.load_state_dict(state['decoder'])
     return state['iters']
+
+
+IMG_EXTENSIONS = [
+    '.jpg', '.JPG', '.jpeg', '.JPEG',
+    '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP',
+]
+
+
+def default_loader(path):
+    return Image.open(path).convert('RGB')
+
+
+class CustomDataset(data.Dataset):
+
+    def __init__(self, path, transform=None, return_paths=False,
+                 loader=default_loader):
+        super(CustomDataset, self).__init__()
+
+        with open(path) as f:
+            imgs = [s.replace('\n', '') for s in f.readlines()]
+
+        if len(imgs) == 0:
+            raise (RuntimeError("Found 0 images in: " + path + "\n"
+                                                               "Supported image extensions are: " +
+                                ",".join(IMG_EXTENSIONS)))
+
+        self.imgs = imgs
+        self.transform = transform
+        self.return_paths = return_paths
+        self.loader = loader
+
+    def __getitem__(self, index):
+        path = self.imgs[index]
+        img = self.loader(path)
+        if self.transform is not None:
+            img = self.transform(img)
+        if self.return_paths:
+            return img, path
+        else:
+            return img
+
+    def __len__(self):
+        return len(self.imgs)
 
 
 if __name__ == '__main__':

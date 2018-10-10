@@ -9,6 +9,7 @@ import torchvision.transforms as transforms
 
 from models import E1, E2, Decoder, Disc
 from utils import save_imgs, save_model, load_model
+from utils import CustomDataset
 
 import argparse
 
@@ -35,8 +36,8 @@ def train(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_train = dset.ImageFolder(root=os.path.join(args.root, 'trainA'), transform=comp_transform)
-    domB_train = dset.ImageFolder(root=os.path.join(args.root, 'trainB'), transform=comp_transform)
+    domA_train = dset.CustomDataset(root=os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
+    domB_train = dset.CustomDataset(root=os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
@@ -86,7 +87,10 @@ def train(args):
                                                   shuffle=True, num_workers=6)
         if _iter >= args.iters:
             break
+
         for domA_img, domB_img in zip(domA_loader, domB_loader):
+            domA_img = torch.cat(domA_img)
+            domB_img = torch.cat(domB_img)
             domA_img = Variable(domA_img)
             domB_img = Variable(domB_img)
 
