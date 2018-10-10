@@ -35,7 +35,7 @@ Contrary to the paper, A is the larger set, for example, A is people with glasse
 You can use the provided script ```preprocess.py``` to split celebA into the above format (with A and B based on the attribute of your choosing).
 For example, you can run the script using the following command:
 ```
-python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeba.txt' --dest './glasses_train' --config 'glasses'
+python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeba.txt' --dest './glasses_train'
 ```
 
 ### To Train
