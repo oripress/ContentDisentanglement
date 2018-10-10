@@ -58,12 +58,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    os.mkdir(args.dest)
-
-    os.mkdir(os.path.join(args.dest, 'trainA'))
-    os.mkdir(os.path.join(args.dest, 'trainB'))
-    os.mkdir(os.path.join(args.dest, 'testA'))
-    os.mkdir(os.path.join(args.dest, 'testB'))
+    if not os.path.exists(args.dest):
+        os.mkdir(args.dest)
 
     allA = []
     allB = []
