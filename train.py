@@ -89,8 +89,6 @@ def train(args):
             break
 
         for domA_img, domB_img in zip(domA_loader, domB_loader):
-            domA_img = torch.cat(domA_img)
-            domB_img = torch.cat(domB_img)
             domA_img = Variable(domA_img)
             domB_img = Variable(domB_img)
 
