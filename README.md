@@ -41,7 +41,7 @@ python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeb
 ### To Train
 Run ```train.py```. You can use the following example to run
 ```
-python train.py --dataroot './glasses_data' --out './glasses_experiment' --sep 25 --disc-weight 0.001
+python train.py --root './glasses_data' --out './glasses_experiment' --sep 25 --discweight 0.001
 ```
 
 ### To Evaluate

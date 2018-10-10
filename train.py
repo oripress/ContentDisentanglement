@@ -33,8 +33,8 @@ def train(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_train = CustomImageFolder(root=os.path.join(args.dataroot, 'trainA'), transform=comp_transform)
-    domB_train = CustomImageFolder(root=os.path.join(args.dataroot, 'trainB'), transform=comp_transform)
+    domA_train = CustomImageFolder(root=os.path.join(args.root, 'trainA'), transform=comp_transform)
+    domB_train = CustomImageFolder(root=os.path.join(args.root, 'trainB'), transform=comp_transform)
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
@@ -155,7 +155,7 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataroot', default='')
+    parser.add_argument('--root', default='')
     parser.add_argument('--out', default='out')
     parser.add_argument('--lr', type=float, default=0.0002)
     parser.add_argument('--bs', type=int, default=32)
