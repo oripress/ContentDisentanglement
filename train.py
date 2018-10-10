@@ -4,12 +4,11 @@ from torch import nn
 from torch import optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
+import torchvision.datasets as dset
 import torchvision.transforms as transforms
 
 from models import E1, E2, Decoder, Disc
 from utils import save_imgs, save_model, load_model
-
-from data import CustomImageFolder
 
 import argparse
 
@@ -36,8 +35,8 @@ def train(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_train = CustomImageFolder(root=os.path.join(args.root, 'trainA'), transform=comp_transform)
-    domB_train = CustomImageFolder(root=os.path.join(args.root, 'trainB'), transform=comp_transform)
+    domA_train = dset.ImageFolder(root=os.path.join(args.root, 'trainA'), transform=comp_transform)
+    domB_train = dset.ImageFolder(root=os.path.join(args.root, 'trainB'), transform=comp_transform)
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
