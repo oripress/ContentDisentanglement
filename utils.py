@@ -115,8 +115,8 @@ def get_test_imgs(args):
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_test = CustomDataset(root=os.path.join(args.root, 'testA.txt'), transform=comp_transform)
-    domB_test = CustomDataset(root=os.path.join(args.root, 'testB.txt'), transform=comp_transform)
+    domA_test = CustomDataset(os.path.join(args.root, 'testA.txt'), transform=comp_transform)
+    domB_test = CustomDataset(os.path.join(args.root, 'testB.txt'), transform=comp_transform)
 
     domA_test_loader = torch.utils.data.DataLoader(domA_test, batch_size=64,
                                                    shuffle=False, num_workers=6)
