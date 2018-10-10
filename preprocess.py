@@ -47,7 +47,7 @@ from shutil import copyfile
 # Young 40
 #######
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default='')
     parser.add_argument('--dest', default='')
@@ -93,9 +93,10 @@ if __name__=='__main__':
     if args.config == 'beard':
         for line in lines[2:]:
             line = line.split()
-            if int(line[21]) == 1 and int(line[1]) == -1 and (int(line[23]) == 1 or int(line[17]) == 1 or int(line[25]) == -1): # male AND (mustache OR goatee OR beard) AND (no shadow)
+            if int(line[21]) == 1 and int(line[1]) == -1 and (int(line[23]) == 1 or int(line[17]) == 1 or int(
+                    line[25]) == -1):  # male AND (mustache OR goatee OR beard) AND (no shadow)
                 allA.append(line[0])
-            elif int(line[21]) == 1 and int(line[25]) == 1 and int(line[1]) == -1:                                              # male AND (no beard, no shadow)
+            elif int(line[21]) == 1 and int(line[25]) == 1 and int(line[1]) == -1:  # male AND (no beard, no shadow)
                 allB.append(line[0])
 
     # Custom
@@ -114,22 +115,28 @@ if __name__=='__main__':
 
     all_imgs = os.listdir(args.root)
 
+    print('Starting to copy files...')
+
     for _img in testA:
         src = os.path.join(args.root, _img)
         dst = os.path.join(args.dest, 'testA', _img)
         copyfile(src, dst)
+    print('Finished preparing testA')
 
     for _img in testB:
         src = os.path.join(args.root, _img)
         dst = os.path.join(args.dest, 'testB', _img)
         copyfile(src, dst)
+    print('Finished preparing testB')
 
     for _img in trainA:
         src = os.path.join(args.root, _img)
         dst = os.path.join(args.dest, 'trainA', _img)
         copyfile(src, dst)
+    print('Finished preparing trainA')
 
     for _img in trainB:
         src = os.path.join(args.root, _img)
         dst = os.path.join(args.dest, 'trainB', _img)
         copyfile(src, dst)
+    print('Finished preparing trainB')
