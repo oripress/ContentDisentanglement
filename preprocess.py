@@ -58,12 +58,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    os.makedirs(args.dest, exist_ok=True)
+    os.mkdir(args.dest)
 
-    os.makedirs(os.path.join(args.dest, 'trainA'), exist_ok=True)
-    os.makedirs(os.path.join(args.dest, 'trainB'), exist_ok=True)
-    os.makedirs(os.path.join(args.dest, 'testA'), exist_ok=True)
-    os.makedirs(os.path.join(args.dest, 'testB'), exist_ok=True)
+    os.mkdir(os.path.join(args.dest, 'trainA'))
+    os.mkdir(os.path.join(args.dest, 'trainB'))
+    os.mkdir(os.path.join(args.dest, 'testA'))
+    os.mkdir(os.path.join(args.dest, 'testB'))
 
     allA = []
     allB = []
