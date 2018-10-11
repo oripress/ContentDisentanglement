@@ -15,6 +15,7 @@ the left column are transferred to the people in the top row.
 - Pytorch 0.4
 - [argparse](https://docs.python.org/2/howto/argparse.html)
 - [shutil](https://docs.python.org/2/library/shutil.html)
+- [Pillow](https://pillow.readthedocs.io/en/5.3.x/)
 
 ## Get Started:
 First, clone this repository by running:

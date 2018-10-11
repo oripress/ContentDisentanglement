@@ -148,7 +148,7 @@ def train(args):
                 e2 = e2.eval()
                 decoder = decoder.eval()
 
-                save_imgs(args, e1, e2, decoder)
+                save_imgs(args, e1, e2, decoder, _iter)
 
                 e1 = e1.train()
                 e2 = e2.train()
@@ -173,11 +173,11 @@ if __name__ == '__main__':
     parser.add_argument('--sep', type=int, default=25)
     parser.add_argument('--discweight', type=float, default=0.001)
     parser.add_argument('--disclr', type=float, default=0.0002)
-    parser.add_argument('--num_display', type=int, default=12)
     parser.add_argument('--progress_iter', type=int, default=100)
-    parser.add_argument('--display_iter', type=int, default=500)
-    parser.add_argument('--save_iter', type=int, default=1000)
+    parser.add_argument('--display_iter', type=int, default=5000)
+    parser.add_argument('--save_iter', type=int, default=10000)
     parser.add_argument('--load', default='')
+    parser.add_argument('--num_display', type=int, default=12)
 
     args = parser.parse_args()
 

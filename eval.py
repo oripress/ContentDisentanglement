@@ -26,7 +26,7 @@ def eval(args):
     if not os.path.exists(args.out) and args.out != "":
         os.mkdir(args.out)
 
-    save_imgs(args, e1, e2, decoder)
+    save_imgs(args, e1, e2, decoder, _iter)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()

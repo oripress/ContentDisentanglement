@@ -5,16 +5,14 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
 import torch.utils.data as data
-import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
 from PIL import Image
 
 
-def save_imgs(args, e1, e2, decoder):
+def save_imgs(args, e1, e2, decoder, iters):
     test_domA, test_domB = get_test_imgs(args)
-
     exps = []
 
     for i in range(args.num_display):
@@ -75,7 +73,7 @@ def save_imgs(args, e1, e2, decoder):
         exps = torch.cat(exps, 0)
 
     vutils.save_image(exps,
-                      '%s/experiments.png' % (args.out),
+                      '%s/experiments_%06d.png' % (args.out, iters),
                       normalize=True, nrow=args.num_display + 3)
 
 
