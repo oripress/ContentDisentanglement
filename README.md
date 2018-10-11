@@ -44,10 +44,10 @@ python preprocess.py --root ./img_align_celeba --attributes ./list_attr_celeba.t
 You can also use your own custom dataset, as long as it adheres to the following format:
 ```
 data/
-     trainA
-     trainB
-     testA
-     testB
+     trainA/
+     trainB/
+     testA/
+     testB/
 ```
 You can then run the preprocessing in the following manner:
 ```
