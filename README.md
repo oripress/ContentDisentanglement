@@ -36,7 +36,7 @@ data/
      testA.text
      testB.text
 ```
-Contrary to the paper, A is the larger set, for example, A is people with glasses and B is people without.
+Contrary to the notation used in the paper, A is the larger set, for example, A is people with glasses and B is people without.
 You can use the provided script ```preprocess.py``` to split celebA into the above format (with A and B based on the attribute of your choosing).
 For example, you can run the script using the following command:
 ```
@@ -47,6 +47,12 @@ python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeb
 Run ```train.py```. You can use the following example to run
 ```
 python train.py --root './glasses_data' --out './glasses_experiment' --sep 25 --discweight 0.001
+```
+
+### To Resume Training
+Run ```train.py```. You can use the following example to run
+```
+python train.py --root './glasses_data' --out './glasses_experiment' --load './glasses_experiment' --sep 25 --discweight 0.001
 ```
 
 ### To Evaluate
