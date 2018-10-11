@@ -1,11 +1,11 @@
 ## Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer
---------------
 
 PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([arxiv]()).
 The network learns to disentangle content between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
 learns to map to decompose a face into 2 parts: one that contains information about glasses and one that contains everything else.
 
-We can then transfer one person's glasses to many different people.
+We can then transfer one person's glasses to many different people. In the image below, the glasses from the people in
+the left column are transferred to the people in the top row.
 <img src="images/gls_mat.png" width="600px">
 
 ## Prerequisites
