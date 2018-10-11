@@ -14,7 +14,6 @@ the left column are transferred to the people in the top row.
 - Python 2.7 / 3.6
 - Pytorch 0.4
 - [argparse](https://docs.python.org/2/howto/argparse.html)
-- [shutil](https://docs.python.org/2/library/shutil.html)
 - [Pillow](https://pillow.readthedocs.io/en/5.3.x/)
 
 ## Get Started:
@@ -46,19 +45,19 @@ python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeb
 ### To Train
 Run ```train.py```. You can use the following example to run
 ```
-python train.py --root './glasses_data' --out './glasses_experiment' --sep 25 --discweight 0.001
+python train.py --root ./glasses_data --out ./glasses_experiment --sep 25 --discweight 0.001
 ```
 
 ### To Resume Training
 Run ```train.py```. You can use the following example to run
 ```
-python train.py --root './glasses_data' --out './glasses_experiment' --load './glasses_experiment' --sep 25 --discweight 0.001
+python train.py --root ./glasses_data --out ./glasses_experiment --load ./glasses_experiment --sep 25 --discweight 0.001
 ```
 
 ### To Evaluate
 Run ```eval.py```. You can use the following example to run
 ```
-python eval.py --dataroot './glasses_data' --out './glasses_eval' --sep 25 --num_display 10
+python eval.py --dataroot ./glasses_data --out ./glasses_eval --sep 25 --num_display 10
 ```
 
 ### Acknowledgements

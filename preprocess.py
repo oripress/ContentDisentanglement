@@ -1,6 +1,5 @@
 import os
 import argparse
-from shutil import copyfile
 
 #######
 # CelebA attributes:

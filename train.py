@@ -4,7 +4,6 @@ from torch import nn
 from torch import optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-import torchvision.datasets as dset
 import torchvision.transforms as transforms
 
 from models import E1, E2, Decoder, Disc
@@ -15,14 +14,6 @@ import argparse
 
 
 def train(args):
-    args.out = args.out + '_size_' + str(args.resize)
-    if args.sep > 0:
-        args.out = args.out + '_sep_' + str(args.sep)
-    if args.discweight > 0:
-        args.out = args.out + '_discweight_' + str(args.discweight)
-    if args.disclr != 0.0002:
-        args.out = args.out + '_disclr_' + str(args.disclr)
-
     if not os.path.exists(args.out):
         os.makedirs(args.out)
 
