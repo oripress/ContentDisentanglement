@@ -46,7 +46,7 @@ root/
 ```
 You can then run the preprocessing in the following manner:
 ```
-python preprocess.py --root ./img_align_celeba --dest ./glasses_train --folders
+python preprocess.py --root ./custom_dataset --dest ./custom_train --folders
 ```
 
 ### To Train
