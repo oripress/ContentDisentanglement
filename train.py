@@ -41,12 +41,12 @@ def train(args):
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
-    B_separate = torch.full((args.bs, args.sep * (args.resize / 64) * (args.resize / 64)), 0)
+    B_separate = torch.full((args.bs, args.sep * (args.resize // 64) * (args.resize // 64)), 0)
 
-    e1 = E1(args.sep, int((args.resize / 64)))
-    e2 = E2(args.sep, int((args.resize / 64)))
-    decoder = Decoder(int((args.resize / 64)))
-    disc = Disc(args.sep, int((args.resize / 64)))
+    e1 = E1(args.sep, args.resize // 64)
+    e2 = E2(args.sep, args.resize // 64)
+    decoder = Decoder(args.resize // 64)
+    disc = Disc(args.sep, args.resize // 64)
 
     mse = nn.MSELoss()
     bce = nn.BCELoss()
@@ -136,9 +136,9 @@ def train(args):
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(disc_params, 5)
-            disc_optimizer.step()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(disc_params, 5)
+                disc_optimizer.step()
 
             if _iter % args.progress_iter == 0:
                 print('Outfile: %s <<>> Iteration %d' % (args.out, _iter))

@@ -1,9 +1,11 @@
 ## Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer
 --------------
 
-PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([arxiv]()). The implementation is based on the architecture of [Fader Networks](https://github.com/facebookresearch/FaderNetworks).
-Some of the code is also based on the implementations of [MUNIT](https://github.com/NVlabs/MUNIT) and [DRIT](https://github.com/HsinYingLee/DRIT), and [StarGAN](https://github.com/yunjey/StarGAN).
+PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([arxiv]()).
+The network learns to disentangle content between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
+learns to map to decompose a face into 2 parts: one that contains information about glasses and one that contains everything else.
 
+We can then transfer one person's glasses to many different people.
 <img src="images/gls_mat.png" width="600px">
 
 ## Prerequisites
@@ -50,3 +52,6 @@ Run ```eval.py```. You can use the following example to run
 python eval.py --dataroot './glasses_data' --out './glasses_eval' --sep 25 --num_display 10
 ```
 
+### Acknowledgements
+The implementation is based on the architecture of [Fader Networks](https://github.com/facebookresearch/FaderNetworks).
+Some of the code is also based on the implementations of [MUNIT](https://github.com/NVlabs/MUNIT) and [DRIT](https://github.com/HsinYingLee/DRIT), and [StarGAN](https://github.com/yunjey/StarGAN).
