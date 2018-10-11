@@ -26,15 +26,6 @@ Download the dataset by running the following command:
 ```
 bash celeba_downloader.sh
 ```
-
-Your data directory should have the following format:
-```
-data/
-     trainA.text
-     trainB.text
-     testA.text
-     testB.text
-```
 Contrary to the notation used in the paper, A is the larger set, for example, A is people with glasses and B is people without.
 You can use the provided script ```preprocess.py``` to split celebA into the above format (with A and B based on the attribute of your choosing).
 For example, you can run the script using the following command:
@@ -43,7 +34,7 @@ python preprocess.py --root ./img_align_celeba --attributes ./list_attr_celeba.t
 ```
 You can also use your own custom dataset, as long as it adheres to the following format:
 ```
-data/
+root/
      trainA/
      trainB/
      testA/
