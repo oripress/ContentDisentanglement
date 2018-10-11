@@ -10,6 +10,10 @@ We can then transfer one person's glasses to many different people. In the image
 the left column are transferred to the people in the top row.
 <img src="images/gls_mat.png" width="600px">
 
+We can also do this for people who already have glasses, i.e. we replace their glasses with another pair:
+<img src="images/gls_swap.png" width="600px">
+
+
 ## Prerequisites
 - Python 2.7 / 3.6
 - Pytorch 0.4
