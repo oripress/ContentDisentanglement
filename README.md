@@ -39,7 +39,19 @@ Contrary to the notation used in the paper, A is the larger set, for example, A 
 You can use the provided script ```preprocess.py``` to split celebA into the above format (with A and B based on the attribute of your choosing).
 For example, you can run the script using the following command:
 ```
-python preprocess.py --root './img_align_celeba' --attributes './list_attr_celeba.txt' --dest './glasses_train'
+python preprocess.py --root ./img_align_celeba --attributes ./list_attr_celeba.txt --dest ./glasses_train
+```
+You can also use your own custom dataset, as long as it adheres to the following format:
+```
+data/
+     trainA
+     trainB
+     testA
+     testB
+```
+You can then run the preprocessing in the following manner:
+```
+python preprocess.py --root ./img_align_celeba --dest ./glasses_train --folders
 ```
 
 ### To Train
