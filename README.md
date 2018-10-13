@@ -4,7 +4,12 @@ PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupe
 
 
 The network learns to disentangle content between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
-learns to map to decompose a face into 2 parts: one that contains information about glasses and one that contains information about everything else.
+learns to decompose a face into 2 parts: one that contains information about glasses and one that contains information about everything else.
+
+
+The network consists of two autoencoders, a decoder, and a discriminator. Given an image of a person with glasses, we use one encoder to 
+encode all of the information about the person exluding their glasses, and one encoder to encode the information about their glasses. Given an image of a person without glasses, we encode using the "non-glasses" encoder, and instead of using the "glasses" encoder, we set the values of the latent space that correspond to "glasses" to 0. We can then feed images of people with and without glasses to the same decoder. We use a discriminator to force the "non-glasses" encoder to not encode any information about the glasses.
+
 
 We can then transfer one person's glasses to many different people. In the image below, the glasses from the people in
 the left column are transferred to the people in the top row.
@@ -50,19 +55,19 @@ python preprocess.py --root ./custom_dataset --dest ./custom_train --folders
 ```
 
 ### To Train
-Run ```train.py```. You can use the following example to run
+Run ```train.py```. You can use the following example to run:
 ```
 python train.py --root ./glasses_data --out ./glasses_experiment --sep 25 --discweight 0.001
 ```
 
 ### To Resume Training
-Run ```train.py```. You can use the following example to run
+Run ```train.py```. You can use the following example to run:
 ```
 python train.py --root ./glasses_data --out ./glasses_experiment --load ./glasses_experiment --sep 25 --discweight 0.001
 ```
 
 ### To Evaluate
-Run ```eval.py```. You can use the following example to run
+Run ```eval.py```. You can use the following example to run:
 ```
 python eval.py --dataroot ./glasses_data --out ./glasses_eval --sep 25 --num_display 10
 ```
