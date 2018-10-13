@@ -16,7 +16,7 @@ the left column are transferred to the people in the top row.
 <img src="images/gls_mat_clear.png" width="1200px">
 
 We can also do this for people who already have glasses, i.e. we replace their glasses with another pair:
-<img src="images/gls_swap_clear.png" width="400px">
+<img src="images/gls_swap_clear.png" width="500px">
 
 
 ## Prerequisites
