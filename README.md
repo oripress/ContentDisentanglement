@@ -8,7 +8,7 @@ learns to map to decompose a face into 2 parts: one that contains information ab
 
 We can then transfer one person's glasses to many different people. In the image below, the glasses from the people in
 the left column are transferred to the people in the top row.
-<img src="images/gls_mat.png" width="600px">
+<img src="images/gls_mat_captions.png" width="600px">
 
 We can also do this for people who already have glasses, i.e. we replace their glasses with another pair:
 <img src="images/gls_swap.png" width="600px">
