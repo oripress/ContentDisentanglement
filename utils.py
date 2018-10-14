@@ -18,63 +18,28 @@ def save_imgs(args, e1, e2, decoder, iters):
     for i in range(args.num_display):
         with torch.no_grad():
             if i == 0:
-                filler = test_domB[i + 1].unsqueeze(0).clone()
-                exps.append(filler.fill_(0))
+                filler = test_domB[i].unsqueeze(0).clone()
                 exps.append(filler.fill_(0))
 
-            exps.append(test_domB[i + 1].unsqueeze(0))
-
-            if i == args.num_display - 1:
-                exps.append(filler)
+            exps.append(test_domB[i].unsqueeze(0))
 
     for i in range(args.num_display):
-        with torch.no_grad():
-            common_B = e1(test_domB[i + 1].unsqueeze(0))
-            separate_B = e2(test_domB[i + 1].unsqueeze(0))
-            separate_B = separate_B.fill_(0)
-
-            B_encoding = torch.cat([common_B, separate_B], dim=1)
-            B_decoding = decoder(B_encoding)
-
-            if i == 0:
-                filler = B_decoding.clone()
-                exps.append(filler.fill_(0))
-                exps.append(filler.fill_(0))
-
-            exps.append(B_decoding)
-
-            if i == args.num_display - 1:
-                exps.append(filler)
-
-    for i in range(args.num_display):
-        for j in range(args.num_display + 2):
+        exps.append(test_domA[i].unsqueeze(0))
+        separate_A = e2(test_domA[i].unsqueeze(0))
+        for j in range(args.num_display):
             with torch.no_grad():
-                common_A = e1(test_domA[i].unsqueeze(0))
-                separate_A = e2(test_domA[i].unsqueeze(0))
                 common_B = e1(test_domB[j].unsqueeze(0))
 
-                if j == 0:
-                    exps.append(test_domA[i].unsqueeze(0))
-                    A_encoding = torch.cat([common_A, separate_A], dim=1)
-                    A_decoding = decoder(A_encoding)
-                    exps.append(A_decoding)
-                elif j < args.num_display + 1:
-                    BA_encoding = torch.cat([common_B, separate_A], dim=1)
-                    BA_decoding = decoder(BA_encoding)
-                    exps.append(BA_decoding)
-                else:
-                    separate_B = e2(test_domB[j].unsqueeze(0))
-                    separate_B = separate_B.fill_(0)
-                    Remove_encoding = torch.cat([common_A, separate_B], dim=1)
-                    Remove_decoding = decoder(Remove_encoding)
-                    exps.append(Remove_decoding)
+                BA_encoding = torch.cat([common_B, separate_A], dim=1)
+                BA_decoding = decoder(BA_encoding)
+                exps.append(BA_decoding)
 
     with torch.no_grad():
         exps = torch.cat(exps, 0)
 
     vutils.save_image(exps,
                       '%s/experiments_%06d.png' % (args.out, iters),
-                      normalize=True, nrow=args.num_display + 3)
+                      normalize=True, nrow=args.num_display + 1)
 
 
 def interpolate(args, e1, e2, decoder):
