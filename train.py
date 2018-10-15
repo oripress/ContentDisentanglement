@@ -80,8 +80,8 @@ def train(args):
             break
 
         for domA_img, domB_img in zip(domA_loader, domB_loader):
-            if domA_img.size(0) != args.bs or domB_img.size(0) != args.bs:
-                break
+            # if domA_img.size(0) != args.bs or domB_img.size(0) != args.bs:
+            #     break
 
             domA_img = Variable(domA_img)
             domB_img = Variable(domB_img)
@@ -100,6 +100,7 @@ def train(args):
             A_encoding = torch.cat([A_common, A_separate], dim=1)
 
             B_common = e1(domB_img)
+            B_separate = B_separate[:B_common.size(0)]
             B_encoding = torch.cat([B_common, B_separate], dim=1)
 
             A_decoding = decoder(A_encoding)
@@ -124,6 +125,9 @@ def train(args):
 
                 disc_A = disc(A_common)
                 disc_B = disc(B_common)
+
+                A_label = disc_A.size(0)
+                B_label = disc_B.size(0)
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
