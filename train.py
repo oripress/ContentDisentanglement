@@ -126,8 +126,8 @@ def train(args):
                 disc_A = disc(A_common)
                 disc_B = disc(B_common)
 
-                A_label = disc_A.size(0)
-                B_label = disc_B.size(0)
+                A_label = A_label[disc_A.size(0)]
+                B_label = B_label[disc_B.size(0)]
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
