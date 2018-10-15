@@ -7,7 +7,7 @@ The network learns to disentangle image representations between a set and its su
 learns to decompose a face representation into 2 parts: one that contains information about glasses and one that contains information about everything else.
 
 
-The network consists of two autoencoders, a decoder, and a discriminator. For example, when training on a dataset that consists of people with glasses and people without, we use one encoder to 
+The network consists of two autoencoders, a decoder, and a discriminator. When training on a dataset that consists of people with glasses and people without, we use one encoder to
 encode all of the information about the person excluding their glasses, and one encoder to encode the information that describes their glasses. Given an image of a person without glasses, we encode using the "non-glasses" encoder, and instead of using the "glasses" encoder, we set the values of the latent space that correspond to "glasses" to 0. We can then feed images of people with and without glasses to the same decoder. We use a discriminator to force the "non-glasses" encoder to not encode any information about the glasses.
 
 
