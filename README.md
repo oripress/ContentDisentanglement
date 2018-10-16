@@ -1,6 +1,6 @@
 ## Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer
 
-PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([arxiv]()).
+PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([link](https://openreview.net/pdf?id=BylE1205Fm)).
 
 
 The network learns to disentangle image representations between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
