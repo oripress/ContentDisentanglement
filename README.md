@@ -6,10 +6,7 @@ PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupe
 The network learns to disentangle image representations between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
 learns to decompose a face representation into 2 parts: one that contains information about glasses and one that contains information about everything else.
 
-
-The network consists of two autoencoders, a decoder, and a discriminator. When training on a dataset that consists of people with glasses and people without, we use one encoder to
-encode all of the information about the person excluding their glasses, and one encoder to encode the information that describes their glasses. Given an image of a person without glasses, we encode using the "non-glasses" encoder, and instead of using the "glasses" encoder, we set the values of the latent space that correspond to "glasses" to 0. We can then feed images of people with and without glasses to the same decoder. We use a discriminator to force the "non-glasses" encoder to not encode any information about the glasses.
-
+To accomplish this, we use two encoders: the first encoder encodes information about the person, not including their glasses. The second encoder only encodes information that has to do with a person's glasses. The two encodings are then fed into a decoder. During training, when encode and decode and image of a person without glasses we just don't use the second encoder. To ensure that the encodings procduced by the first encoder do not contain information about glasses, we use a discriminator that tries to predict whether an encoding came from an image of a person with or without glasses.
 
 We can then transfer one person's glasses to many different people. In the image below, the glasses from the people in
 the left column are transferred to the people in the top row.
