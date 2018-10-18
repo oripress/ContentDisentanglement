@@ -115,3 +115,38 @@ class Disc(nn.Module):
         net = self.classify(net)
         net = net.view(-1)
         return net
+
+
+class PatchDisc(nn.Module):
+    def __init__(self):
+        super(PatchDisc, self).__init__()
+        self.full = nn.Sequential(
+            nn.Conv2d(3, 32, 4, 2, 1),
+            nn.InstanceNorm2d(32),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(32, 64, 4, 2, 1),
+            nn.InstanceNorm2d(64),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(64, 128, 4, 2, 1),
+            nn.InstanceNorm2d(128),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(128, 256, 4, 2, 1),
+            nn.InstanceNorm2d(256),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(256, 512, 4, 2, 1),
+            nn.InstanceNorm2d(512),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(256, 512, 4, 2, 1),
+            nn.InstanceNorm2d(512),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(512, 512, 4, 2, 1),
+            nn.InstanceNorm2d(512),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(512, 1, 4, 2, 1),
+            nn.Sigmoid()
+        )
+
+    def forward(self, net):
+        net = self.full(net)
+        net = net.view(-1, 1)
+        return net

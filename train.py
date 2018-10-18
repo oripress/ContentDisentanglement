@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 
-from models import E1, E2, Decoder, Disc
+from models import E1, E2, Decoder, Disc, PatchDisc
 from utils import save_imgs, save_model, load_model
 from utils import CustomDataset
 
@@ -38,6 +38,7 @@ def train(args):
     e2 = E2(args.sep, args.resize // 64)
     decoder = Decoder(args.resize // 64)
     disc = Disc(args.sep, args.resize // 64)
+    patch = PatchDisc()
 
     mse = nn.MSELoss()
     bce = nn.BCELoss()
@@ -47,6 +48,7 @@ def train(args):
         e2 = e2.cuda()
         decoder = decoder.cuda()
         disc = disc.cuda()
+        patch = patch.cuda()
 
         A_label = A_label.cuda()
         B_label = B_label.cuda()
@@ -60,6 +62,9 @@ def train(args):
 
     disc_params = disc.parameters()
     disc_optimizer = optim.Adam(disc_params, lr=args.disclr, betas=(0.5, 0.999))
+
+    patch_params = patch.parameters()
+    patch_optimizer = optim.Adam(patch_params, lr=args.patchlr, betas=(0.5, 0.999))
 
     if args.load != '':
         save_file = os.path.join(args.load, 'checkpoint')
@@ -112,6 +117,11 @@ def train(args):
                 preds_B = disc(B_common)
                 loss += args.discweight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
+            if args.patch > 0:
+                preds_fake_1 = patch(A_decoding)
+                preds_fake_2 = patch(B_decoding)
+                loss += args.patch * 0.5 * (bce(preds_fake_1, A_label) + bce(preds_fake_2, A_label))
+
             loss.backward()
             torch.nn.utils.clip_grad_norm_(ae_params, 5)
             ae_optimizer.step()
@@ -130,6 +140,31 @@ def train(args):
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(disc_params, 5)
                 disc_optimizer.step()
+
+            if args.patch > 0:
+                patch_optimizer.zero_grad()
+
+                preds_real_A = patch(domA_img)
+                preds_real_B = patch(domB_img)
+
+                A_common = e1(domA_img)
+                A_separate = e2(domA_img)
+                A_encoding = torch.cat([A_common, A_separate], dim=1)
+
+                B_common = e1(domB_img)
+                B_encoding = torch.cat([B_common, B_separate], dim=1)
+
+                A_decoding = decoder(A_encoding)
+                B_decoding = decoder(B_encoding)
+
+                preds_fake_A = patch(A_decoding)
+                preds_fake_B = patch(B_decoding)
+
+                loss = bce(preds_real_A, A_label) + bce(preds_real_B, A_label) + bce(preds_fake_A, B_label) + bce(preds_fake_B, B_label)
+
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(patch_params, 5)
+                patch_optimizer.step()
 
             if _iter % args.progress_iter == 0:
                 print('Outfile: %s <<>> Iteration %d' % (args.out, _iter))
@@ -163,7 +198,9 @@ if __name__ == '__main__':
     parser.add_argument('--crop', type=int, default=178)
     parser.add_argument('--sep', type=int, default=25)
     parser.add_argument('--discweight', type=float, default=0.001)
+    parser.add_argument('--patch', type=float, default=0.001)
     parser.add_argument('--disclr', type=float, default=0.0002)
+    parser.add_argument('--patchlr', type=float, default=0.0002)
     parser.add_argument('--progress_iter', type=int, default=100)
     parser.add_argument('--display_iter', type=int, default=5000)
     parser.add_argument('--save_iter', type=int, default=10000)
