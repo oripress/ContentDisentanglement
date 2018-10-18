@@ -136,7 +136,7 @@ class PatchDisc(nn.Module):
             nn.Conv2d(256, 512, 4, 2, 1),
             nn.InstanceNorm2d(512),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(256, 512, 4, 2, 1),
+            nn.Conv2d(512, 512, 4, 2, 1),
             nn.InstanceNorm2d(512),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(512, 512, 4, 2, 1),
