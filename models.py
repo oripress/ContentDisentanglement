@@ -7,7 +7,10 @@ class E1(nn.Module):
         self.size = size
 
         self.full = nn.Sequential(
-            nn.Conv2d(3, 32, 4, 2, 1),
+            nn.Conv2d(3, 16, 4, 2, 1),
+            nn.InstanceNorm2d(16),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(16, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(32, 64, 4, 2, 1),
@@ -40,7 +43,10 @@ class E2(nn.Module):
         self.size = size
 
         self.full = nn.Sequential(
-            nn.Conv2d(3, 32, 4, 2, 1),
+            nn.Conv2d(3, 16, 4, 2, 1),
+            nn.InstanceNorm2d(16),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(16, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(32, 64, 4, 2, 1),
@@ -87,7 +93,10 @@ class Decoder(nn.Module):
             nn.ConvTranspose2d(64, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(32, 3, 4, 2, 1),
+            nn.ConvTranspose2d(32, 16, 4, 2, 1),
+            nn.InstanceNorm2d(16),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(16, 3, 4, 2, 1),
             nn.Tanh()
         )
 
@@ -121,7 +130,10 @@ class PatchDisc(nn.Module):
     def __init__(self):
         super(PatchDisc, self).__init__()
         self.full = nn.Sequential(
-            nn.Conv2d(3, 32, 4, 2, 1),
+            nn.Conv2d(3, 16, 4, 2, 1),
+            nn.InstanceNorm2d(16),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(16, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(32, 64, 4, 2, 1),

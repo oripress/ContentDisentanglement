@@ -30,14 +30,16 @@ def train(args):
     domA_train = CustomDataset(os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
     domB_train = CustomDataset(os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
 
+    emb_size = args.resize // 128
+
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
-    B_separate = torch.full((args.bs, args.sep * (args.resize // 64) * (args.resize // 64)), 0)
+    B_separate = torch.full((args.bs, args.sep * (emb_size) * (emb_size)), 0)
 
-    e1 = E1(args.sep, args.resize // 64)
-    e2 = E2(args.sep, args.resize // 64)
-    decoder = Decoder(args.resize // 64)
-    disc = Disc(args.sep, args.resize // 64)
+    e1 = E1(args.sep, emb_size)
+    e2 = E2(args.sep, emb_size)
+    decoder = Decoder(emb_size)
+    disc = Disc(args.sep, emb_size)
     patch = PatchDisc()
 
     mse = nn.MSELoss()
