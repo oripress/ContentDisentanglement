@@ -38,7 +38,7 @@ def save_imgs(args, e1, e2, decoder, iters):
         exps = torch.cat(exps, 0)
 
     vutils.save_image(exps,
-                      '%s/experiments_%06d.png' % (args.out, iters),
+                      '%s/experiments_%06d.png' % (args.out, 0),
                       normalize=True, nrow=args.num_display + 1)
 
 
