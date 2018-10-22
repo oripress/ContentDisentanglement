@@ -30,7 +30,7 @@ def train(args):
     domA_train = CustomDataset(os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
     domB_train = CustomDataset(os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
 
-    emb_size = args.resize // 128
+    emb_size = args.resize // 64
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
@@ -65,8 +65,9 @@ def train(args):
     disc_params = disc.parameters()
     disc_optimizer = optim.Adam(disc_params, lr=args.disclr, betas=(0.5, 0.999))
 
-    patch_params = patch.parameters()
-    patch_optimizer = optim.Adam(patch_params, lr=args.patchlr, betas=(0.5, 0.999))
+    if args.patch > 0:
+        patch_params = patch.parameters()
+        patch_optimizer = optim.Adam(patch_params, lr=args.patchlr, betas=(0.5, 0.999))
 
     if args.load != '':
         save_file = os.path.join(args.load, 'checkpoint')
