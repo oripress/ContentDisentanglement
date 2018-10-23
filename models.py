@@ -20,11 +20,11 @@ class E1(nn.Module):
             nn.Conv2d(64, 128, 4, 2, 1),
             nn.InstanceNorm2d(128),
             nn.LeakyReLU(0.2, inplace=True),
-        )
-        self.second = nn.Sequential(
             nn.Conv2d(128, 256, 4, 2, 1),
             nn.InstanceNorm2d(256),
             nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.second = nn.Sequential(
             nn.Conv2d(256, (512 - self.sep), 4, 2, 1),
             nn.InstanceNorm2d(512 - self.sep),
             nn.LeakyReLU(0.2, inplace=True),
@@ -34,8 +34,8 @@ class E1(nn.Module):
         )
 
         self.res = nn.Sequential(
-            nn.Conv2d(128, 16, 1),
-            nn.InstanceNorm2d(16),
+            nn.Conv2d(256, 4, 1),
+            nn.InstanceNorm2d(4),
             nn.LeakyReLU(0.2, inplace=True),
         )
 
@@ -96,12 +96,12 @@ class Decoder(nn.Module):
             nn.ConvTranspose2d(512, 256, 4, 2, 1),
             nn.InstanceNorm2d(256),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(256, 128, 4, 2, 1),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(inplace=True),
         )
         self.second = nn.Sequential(
-            nn.ConvTranspose2d(144, 64, 4, 2, 1),
+            nn.ConvTranspose2d(260, 128, 4, 2, 1),
+            nn.InstanceNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(128, 64, 4, 2, 1),
             nn.InstanceNorm2d(64),
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(64, 32, 4, 2, 1),
