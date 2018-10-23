@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 class E1(nn.Module):
@@ -6,7 +7,7 @@ class E1(nn.Module):
         self.sep = sep
         self.size = size
 
-        self.full = nn.Sequential(
+        self.first = nn.Sequential(
             # nn.Conv2d(3, 16, 4, 2, 1),
             # nn.InstanceNorm2d(16),
             # nn.LeakyReLU(0.2, inplace=True),
@@ -19,6 +20,8 @@ class E1(nn.Module):
             nn.Conv2d(64, 128, 4, 2, 1),
             nn.InstanceNorm2d(128),
             nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.second = nn.Sequential(
             nn.Conv2d(128, 256, 4, 2, 1),
             nn.InstanceNorm2d(256),
             nn.LeakyReLU(0.2, inplace=True),
@@ -30,10 +33,19 @@ class E1(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
         )
 
+        self.res = nn.Sequential(
+            nn.Conv2d(128, 16, 1),
+            nn.InstanceNorm2d(16),
+            nn.LeakyReLU(0.2, inplace=True),
+        )
+
+
     def forward(self, net):
-        net = self.full(net)
+        net = self.first(net)
+        res = self.res(net)
+        net = self.second(net)
         net = net.view(-1, (512 - self.sep) * self.size * self.size)
-        return net
+        return net, res
 
 
 class E2(nn.Module):
@@ -77,7 +89,7 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.size = size
 
-        self.main = nn.Sequential(
+        self.first = nn.Sequential(
             nn.ConvTranspose2d(512, 512, 4, 2, 1),
             nn.InstanceNorm2d(512),
             nn.ReLU(inplace=True),
@@ -87,7 +99,9 @@ class Decoder(nn.Module):
             nn.ConvTranspose2d(256, 128, 4, 2, 1),
             nn.InstanceNorm2d(128),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
+        )
+        self.second = nn.Sequential(
+            nn.ConvTranspose2d(144, 64, 4, 2, 1),
             nn.InstanceNorm2d(64),
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(64, 32, 4, 2, 1),
@@ -100,9 +114,12 @@ class Decoder(nn.Module):
             nn.Tanh()
         )
 
-    def forward(self, net):
+
+    def forward(self, net, res):
         net = net.view(-1, 512, self.size, self.size)
-        net = self.main(net)
+        net = self.first(net)
+        net = torch.cat([net, res], dim=1)
+        net = self.second(net)
         return net
 
 

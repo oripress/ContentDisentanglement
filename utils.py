@@ -28,10 +28,10 @@ def save_imgs(args, e1, e2, decoder, iters):
         separate_A = e2(test_domA[i].unsqueeze(0))
         for j in range(args.num_display):
             with torch.no_grad():
-                common_B = e1(test_domB[j].unsqueeze(0))
+                common_B, res_B = e1(test_domB[j].unsqueeze(0))
 
                 BA_encoding = torch.cat([common_B, separate_A], dim=1)
-                BA_decoding = decoder(BA_encoding)
+                BA_decoding = decoder(BA_encoding, res_B)
                 exps.append(BA_decoding)
 
     with torch.no_grad():
