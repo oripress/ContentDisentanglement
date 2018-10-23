@@ -34,7 +34,7 @@ class E1(nn.Module):
         )
 
         self.res = nn.Sequential(
-            nn.Conv2d(128, 1, 1),
+            nn.Conv2d(64, 1, 1),
             # nn.InstanceNorm2d(4),
             nn.LeakyReLU(0.2, inplace=True),
         )
