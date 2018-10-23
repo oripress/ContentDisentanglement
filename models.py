@@ -17,11 +17,11 @@ class E1(nn.Module):
             nn.Conv2d(32, 64, 4, 2, 1),
             nn.InstanceNorm2d(64),
             nn.LeakyReLU(0.2, inplace=True),
-        )
-        self.second = nn.Sequential(
             nn.Conv2d(64, 128, 4, 2, 1),
             nn.InstanceNorm2d(128),
             nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.second = nn.Sequential(
             nn.Conv2d(128, 256, 4, 2, 1),
             nn.InstanceNorm2d(256),
             nn.LeakyReLU(0.2, inplace=True),
@@ -34,7 +34,7 @@ class E1(nn.Module):
         )
 
         self.res = nn.Sequential(
-            nn.Conv2d(64, 1, 1),
+            nn.Conv2d(128, 2, 1),
             # nn.InstanceNorm2d(4),
             nn.LeakyReLU(0.2, inplace=True),
         )
@@ -99,11 +99,11 @@ class Decoder(nn.Module):
             nn.ConvTranspose2d(256, 128, 4, 2, 1),
             nn.InstanceNorm2d(128),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(inplace=True),
         )
         self.second = nn.Sequential(
+            nn.ConvTranspose2d(130, 64, 4, 2, 1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(inplace=True),
             nn.ConvTranspose2d(65, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.ReLU(inplace=True),
@@ -130,14 +130,14 @@ class Disc(nn.Module):
         self.size = size
 
         self.classify = nn.Sequential(
-            nn.Linear(((512 - self.sep) * self.size * self.size) + 4 * 4 * 64, 512),
+            nn.Linear(((512 - self.sep) * self.size * self.size) + 2 * 4 * 64, 512),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(512, 1),
             nn.Sigmoid()
         )
 
     def forward(self, net):
-        net = net.view(-1, ((512 - self.sep) * self.size * self.size) + 4 * 4 * 64)
+        net = net.view(-1, ((512 - self.sep) * self.size * self.size) + 2 * 4 * 64)
         net = self.classify(net)
         net = net.view(-1)
         return net
