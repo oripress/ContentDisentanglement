@@ -116,8 +116,14 @@ def train(args):
             loss = mse(A_decoding, domA_img) + mse(B_decoding, domB_img)
 
             if args.discweight > 0:
-                preds_A = disc(A_common)
-                preds_B = disc(B_common)
+                A_res = A_res.view(args.bs, -1)
+                B_res = B_res.view(args.bs, -1)
+
+                A_common_tag = torch.cat([A_common, A_res], dim=1)
+                B_common_tag = torch.cat([B_common, B_res], dim=1)
+
+                preds_A = disc(A_common_tag)
+                preds_B = disc(B_common_tag)
                 loss += args.discweight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
             if args.patch > 0:
@@ -132,8 +138,14 @@ def train(args):
             if args.discweight > 0:
                 disc_optimizer.zero_grad()
 
-                A_common, _ = e1(domA_img)
-                B_common, _ = e1(domB_img)
+                A_common, A_res = e1(domA_img)
+                B_common, B_res = e1(domB_img)
+
+                A_res = A_res.view(args.bs, -1)
+                B_res = B_res.view(args.bs, -1)
+
+                A_common = torch.cat([A_common, A_res], dim=1)
+                B_common = torch.cat([B_common, B_res], dim=1)
 
                 disc_A = disc(A_common)
                 disc_B = disc(B_common)
