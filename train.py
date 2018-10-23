@@ -132,8 +132,8 @@ def train(args):
             if args.discweight > 0:
                 disc_optimizer.zero_grad()
 
-                A_common = e1(domA_img)
-                B_common = e1(domB_img)
+                A_common, _ = e1(domA_img)
+                B_common, _ = e1(domB_img)
 
                 disc_A = disc(A_common)
                 disc_B = disc(B_common)
