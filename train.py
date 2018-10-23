@@ -213,7 +213,7 @@ if __name__ == '__main__':
     parser.add_argument('--crop', type=int, default=178)
     parser.add_argument('--sep', type=int, default=25)
     parser.add_argument('--discweight', type=float, default=0.001)
-    parser.add_argument('--patch', type=float, default=0.001)
+    parser.add_argument('--patch', type=float, default=0)
     parser.add_argument('--disclr', type=float, default=0.0002)
     parser.add_argument('--patchlr', type=float, default=0.0002)
     parser.add_argument('--progress_iter', type=int, default=100)
