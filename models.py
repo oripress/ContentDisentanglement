@@ -104,7 +104,7 @@ class Decoder(nn.Module):
             nn.ConvTranspose2d(130, 64, 4, 2, 1),
             nn.InstanceNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(65, 32, 4, 2, 1),
+            nn.ConvTranspose2d(64, 32, 4, 2, 1),
             nn.InstanceNorm2d(32),
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(32, 3, 4, 2, 1),
@@ -130,14 +130,14 @@ class Disc(nn.Module):
         self.size = size
 
         self.classify = nn.Sequential(
-            nn.Linear(((512 - self.sep) * self.size * self.size) + 2 * 4 * 64, 512),
+            nn.Linear(((512 - self.sep) * self.size * self.size) + 2 * 16 * 16, 512),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(512, 1),
             nn.Sigmoid()
         )
 
     def forward(self, net):
-        net = net.view(-1, ((512 - self.sep) * self.size * self.size) + 2 * 4 * 64)
+        net = net.view(-1, ((512 - self.sep) * self.size * self.size) + 2 * 16 * 16)
         net = self.classify(net)
         net = net.view(-1)
         return net
