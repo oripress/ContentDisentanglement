@@ -225,3 +225,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     train(args)
+
+    if args.patch > 0:
+        args.out = args.out + '_patch_' + str(args.patch)
+    if args.discweight > 0:
+        args.out = args.out + '_discweight_' + str(args.discweight)
