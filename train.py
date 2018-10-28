@@ -162,15 +162,15 @@ def train(args):
                 preds_real_A = patch(domA_img)
                 preds_real_B = patch(domB_img)
 
-                A_common = e1(domA_img)
+                A_common, A_res = e1(domA_img)
                 A_separate = e2(domA_img)
                 A_encoding = torch.cat([A_common, A_separate], dim=1)
 
-                B_common = e1(domB_img)
+                B_common, B_res = e1(domB_img)
                 B_encoding = torch.cat([B_common, B_separate], dim=1)
 
-                A_decoding = decoder(A_encoding)
-                B_decoding = decoder(B_encoding)
+                A_decoding = decoder(A_encoding, A_res)
+                B_decoding = decoder(B_encoding, B_res)
 
                 preds_fake_A = patch(A_decoding)
                 preds_fake_B = patch(B_decoding)
