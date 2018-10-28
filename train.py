@@ -217,8 +217,8 @@ if __name__ == '__main__':
     parser.add_argument('--disclr', type=float, default=0.0002)
     parser.add_argument('--patchlr', type=float, default=0.0002)
     parser.add_argument('--progress_iter', type=int, default=100)
-    parser.add_argument('--display_iter', type=int, default=500)
-    parser.add_argument('--save_iter', type=int, default=-10000)
+    parser.add_argument('--display_iter', type=int, default=250)
+    parser.add_argument('--save_iter', type=int, default=--10000)
     parser.add_argument('--load', default='')
     parser.add_argument('--num_display', type=int, default=12)
 
