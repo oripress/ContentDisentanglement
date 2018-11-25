@@ -35,7 +35,8 @@ def train(args):
     B_separate = torch.full((args.bs, args.sep * (args.resize // 64) * (args.resize // 64)), 0)
 
     e1 = E1(args.sep, args.resize // 64)
-    e2 = E2(args.sep, args.resize // 64)
+    # e2 = E2(args.sep, args.resize // 64)
+    e2 = E2()
     decoder = Decoder(args.resize // 64)
     disc = Disc(args.sep, args.resize // 64)
 
