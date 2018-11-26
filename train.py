@@ -101,6 +101,7 @@ def train(args):
             A_encoding = torch.cat([A_common, A_separate], dim=1)
 
             B_common = e1(domB_img)
+            B_separate = e2(domB_img)
             B_encoding = torch.cat([B_common, B_separate], dim=1)
 
             A_decoding = decoder(A_encoding)
