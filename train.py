@@ -65,9 +65,10 @@ def train(args):
     disc_params = disc.parameters()
     disc_optimizer = optim.Adam(disc_params, lr=args.disclr, betas=(0.5, 0.999))
 
-    if args.patch > 0:
+'''    if args.patch > 0:
         patch_params = patch.parameters()
         patch_optimizer = optim.Adam(patch_params, lr=args.patchlr, betas=(0.5, 0.999))
+'''
 
     if args.load != '':
         save_file = os.path.join(args.load, 'checkpoint')
@@ -125,11 +126,12 @@ def train(args):
                 preds_A = disc(A_common_tag)
                 preds_B = disc(B_common_tag)
                 loss += args.discweight * (bce(preds_A, B_label) + bce(preds_B, B_label))
-
+'''
             if args.patch > 0:
                 preds_fake_1 = patch(A_decoding)
                 preds_fake_2 = patch(B_decoding)
                 loss += args.patch * 0.5 * (bce(preds_fake_1, A_label) + bce(preds_fake_2, A_label))
+'''
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(ae_params, 5)
@@ -156,7 +158,7 @@ def train(args):
                 torch.nn.utils.clip_grad_norm_(disc_params, 5)
                 disc_optimizer.step()
 
-            if args.patch > 0:
+'''            if args.patch > 0:
                 patch_optimizer.zero_grad()
 
                 preds_real_A = patch(domA_img)
@@ -180,6 +182,7 @@ def train(args):
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(patch_params, 5)
                 patch_optimizer.step()
+'''
 
             if _iter % args.progress_iter == 0:
                 print('Outfile: %s <<>> Iteration %d' % (args.out, _iter))
