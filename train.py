@@ -108,8 +108,8 @@ def train(args):
             loss = mse(A_decoding, domA_img) + mse(B_decoding, domB_img)
 
             if args.discweight > 0:
-                preds_A = disc(A_encoding[:, -marker:])
-                preds_B = disc(B_encoding[:, -marker:])
+                preds_A = disc(A_encoding[:, :-marker])
+                preds_B = disc(B_encoding[:, :-marker])
                 loss_weight = min((float(_iter) / 500000), 1)
                 loss += args.discweight * loss_weight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
@@ -123,8 +123,8 @@ def train(args):
                 A_encoding = e1(domA_img)
                 B_encoding = e1(domB_img)
 
-                disc_A = disc(A_encoding[:, -marker:])
-                disc_B = disc(B_encoding[:, -marker:])
+                disc_A = disc(A_encoding[:, :-marker])
+                disc_B = disc(B_encoding[:, :-marker])
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
