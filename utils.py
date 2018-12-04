@@ -28,7 +28,7 @@ def save_imgs(args, e1, decoder, iters, marker):
         separate_A = e1(test_domA[i].unsqueeze(0))[-marker:]
         for j in range(args.num_display):
             with torch.no_grad():
-                common_B = e1(test_domB[j].unsqueeze(0))[:marker]
+                common_B = e1(test_domB[j].unsqueeze(0))[:-marker]
 
                 BA_encoding = torch.cat([common_B, separate_A], dim=1)
                 BA_decoding = decoder(BA_encoding)
