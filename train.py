@@ -17,7 +17,7 @@ def train(args):
     if not os.path.exists(args.out):
         os.makedirs(args.out)
 
-    _iter = 0
+    _iter = 1 
 
     comp_transform = transforms.Compose([
         transforms.CenterCrop(args.crop),
@@ -30,14 +30,16 @@ def train(args):
     domA_train = CustomDataset(os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
     domB_train = CustomDataset(os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
 
+    _size = args.resize // 128
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
-    B_separate = torch.full((args.bs, args.sep * (args.resize // 64) * (args.resize // 64)), 0)
+    B_separate = torch.full((args.bs, args.sep * _size * _size), 0)
 
-    e1 = E1(args.sep, args.resize // 64)
-    e2 = E2(args.sep, args.resize // 64)
-    decoder = Decoder(args.resize // 64)
-    disc = Disc(args.sep, args.resize // 64)
+
+    e1 = E1(args.sep, _size)
+    e2 = E2(args.sep, _size)
+    decoder = Decoder(_size)
+    disc = Disc(args.sep, _size)
 
     mse = nn.MSELoss()
     bce = nn.BCELoss()
@@ -110,7 +112,8 @@ def train(args):
             if args.discweight > 0:
                 preds_A = disc(A_common)
                 preds_B = disc(B_common)
-                loss += args.discweight * (bce(preds_A, B_label) + bce(preds_B, B_label))
+		loss_weight = min((float(_iter) / 500000), 1)
+                loss += args.discweight * loss_weight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(ae_params, 5)
@@ -158,7 +161,7 @@ if __name__ == '__main__':
     parser.add_argument('--out', default='out')
     parser.add_argument('--lr', type=float, default=0.0002)
     parser.add_argument('--bs', type=int, default=32)
-    parser.add_argument('--iters', type=int, default=1250000)
+    parser.add_argument('--iters', type=int, default=1500000)
     parser.add_argument('--resize', type=int, default=128)
     parser.add_argument('--crop', type=int, default=178)
     parser.add_argument('--sep', type=int, default=25)
@@ -172,4 +175,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    args.out = args.out + '_' + str(args.discweight)
     train(args)
