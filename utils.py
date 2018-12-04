@@ -11,7 +11,7 @@ import torchvision.utils as vutils
 from PIL import Image
 
 
-def save_imgs(args, e1, e2, decoder, iters):
+def save_imgs(args, e1, decoder, iters, marker):
     test_domA, test_domB = get_test_imgs(args)
     exps = []
 
@@ -25,10 +25,10 @@ def save_imgs(args, e1, e2, decoder, iters):
 
     for i in range(args.num_display):
         exps.append(test_domA[i].unsqueeze(0))
-        separate_A = e2(test_domA[i].unsqueeze(0))
+        separate_A = e1(test_domA[i].unsqueeze(0))[-marker:]
         for j in range(args.num_display):
             with torch.no_grad():
-                common_B = e1(test_domB[j].unsqueeze(0))
+                common_B = e1(test_domB[j].unsqueeze(0))[:marker]
 
                 BA_encoding = torch.cat([common_B, separate_A], dim=1)
                 BA_decoding = decoder(BA_encoding)
@@ -38,7 +38,7 @@ def save_imgs(args, e1, e2, decoder, iters):
         exps = torch.cat(exps, 0)
 
     vutils.save_image(exps,
-                      '%s/experiments_%06d.png' % (args.out, iters),
+                      '%s/experiments_%06d.png' % (args.out, 0),
                       normalize=True, nrow=args.num_display + 1)
 
 
@@ -105,10 +105,9 @@ def get_test_imgs(args):
     return domA_img, domB_img
 
 
-def save_model(out_file, e1, e2, decoder, ae_opt, disc, disc_opt, iters):
+def save_model(out_file, e1, decoder, ae_opt, disc, disc_opt, iters):
     state = {
         'e1': e1.state_dict(),
-        'e2': e2.state_dict(),
         'decoder': decoder.state_dict(),
         'ae_opt': ae_opt.state_dict(),
         'disc': disc.state_dict(),
@@ -119,10 +118,9 @@ def save_model(out_file, e1, e2, decoder, ae_opt, disc, disc_opt, iters):
     return
 
 
-def load_model(load_path, e1, e2, decoder, ae_opt, disc, disc_opt):
+def load_model(load_path, e1, decoder, ae_opt, disc, disc_opt):
     state = torch.load(load_path)
     e1.load_state_dict(state['e1'])
-    e2.load_state_dict(state['e2'])
     decoder.load_state_dict(state['decoder'])
     ae_opt.load_state_dict(state['ae_opt'])
     disc.load_state_dict(state['disc'])
@@ -130,10 +128,9 @@ def load_model(load_path, e1, e2, decoder, ae_opt, disc, disc_opt):
     return state['iters']
 
 
-def load_model_for_eval(load_path, e1, e2, decoder, ):
+def load_model_for_eval(load_path, e1, decoder):
     state = torch.load(load_path)
     e1.load_state_dict(state['e1'])
-    e2.load_state_dict(state['e2'])
     decoder.load_state_dict(state['decoder'])
     return state['iters']
 

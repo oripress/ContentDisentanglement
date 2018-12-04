@@ -1,9 +1,9 @@
 import torch.nn as nn
 
+
 class E1(nn.Module):
-    def __init__(self, sep, size):
+    def __init__(self, size):
         super(E1, self).__init__()
-        self.sep = sep
         self.size = size
 
         self.full = nn.Sequential(
@@ -22,55 +22,55 @@ class E1(nn.Module):
             nn.Conv2d(128, 256, 4, 2, 1),
             nn.InstanceNorm2d(256, affine=True),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(256, (512 - self.sep), 4, 2, 1),
-            nn.InstanceNorm2d(512 - self.sep, affine=True),
+            nn.Conv2d(256, (512), 4, 2, 1),
+            nn.InstanceNorm2d(512, affine=True),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d((512 - self.sep), (512 - self.sep), 4, 2, 1),
-            nn.InstanceNorm2d(512 - self.sep, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d((512), (512), 4, 2, 1),
+            nn.InstanceNorm2d(512, affine=True),
+            nn.LeakyReLU(0.2, inplace=False),
         )
 
     def forward(self, net):
         net = self.full(net)
-        net = net.view(-1, (512 - self.sep) * self.size * self.size)
+        net = net.view(-1, (512) * self.size * self.size)
         return net
 
 
-class E2(nn.Module):
-    def __init__(self, sep, size):
-        super(E2, self).__init__()
-        self.sep = sep
-        self.size = size
-
-        self.full = nn.Sequential(
-            nn.Conv2d(3, 16, 4, 2, 1),
-            nn.InstanceNorm2d(16, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(16, 32, 4, 2, 1),
-            nn.InstanceNorm2d(32, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(32, 64, 4, 2, 1),
-            nn.InstanceNorm2d(64, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(64, 128, 4, 2, 1),
-            nn.InstanceNorm2d(128, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(128, 128, 4, 2, 1),
-            nn.InstanceNorm2d(128, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(128, 128, 4, 2, 1),
-            nn.InstanceNorm2d(128, affine=True),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(128, self.sep, 4, 2, 1),
-            nn.InstanceNorm2d(self.sep, affine=True),
-            nn.LeakyReLU(0.2),
-        )
-
-    def forward(self, net):
-        net = self.full(net)
-        net = net.view(-1, self.sep * self.size * self.size)
-        return net
-
+# class E2(nn.Module):
+#     def __init__(self, sep, size):
+#         super(E2, self).__init__()
+#         self.sep = sep
+#         self.size = size
+#
+#         self.full = nn.Sequential(
+#             nn.Conv2d(3, 16, 4, 2, 1),
+#             nn.InstanceNorm2d(16, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(16, 32, 4, 2, 1),
+#             nn.InstanceNorm2d(32, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(32, 64, 4, 2, 1),
+#             nn.InstanceNorm2d(64, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(64, 128, 4, 2, 1),
+#             nn.InstanceNorm2d(128, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(128, 128, 4, 2, 1),
+#             nn.InstanceNorm2d(128, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(128, 128, 4, 2, 1),
+#             nn.InstanceNorm2d(128, affine=True),
+#             nn.LeakyReLU(0.2, inplace=True),
+#             nn.Conv2d(128, self.sep, 4, 2, 1),
+#             nn.InstanceNorm2d(self.sep, affine=True),
+#             nn.LeakyReLU(0.2),
+#         )
+#
+#     def forward(self, net):
+#         net = self.full(net)
+#         net = net.view(-1, self.sep * self.size * self.size)
+#         return net
+#
 
 class Decoder(nn.Module):
     def __init__(self, size):

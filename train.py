@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 
-from models import E1, E2, Decoder, Disc
+from models import E1, Decoder, Disc
 from utils import save_imgs, save_model, load_model
 from utils import CustomDataset
 
@@ -17,7 +17,7 @@ def train(args):
     if not os.path.exists(args.out):
         os.makedirs(args.out)
 
-    _iter = 1 
+    _iter = 1
 
     comp_transform = transforms.Compose([
         transforms.CenterCrop(args.crop),
@@ -33,11 +33,11 @@ def train(args):
     _size = args.resize // 128
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
-    B_separate = torch.full((args.bs, args.sep * _size * _size), 0)
+    # B_separate = torch.full((args.bs, args.sep * _size * _size), 0)
+    marker = args.sep * _size * _size
 
-
-    e1 = E1(args.sep, _size)
-    e2 = E2(args.sep, _size)
+    e1 = E1(_size)
+    # e2 = E2(args.sep, _size)
     decoder = Decoder(_size)
     disc = Disc(args.sep, _size)
 
@@ -46,18 +46,19 @@ def train(args):
 
     if torch.cuda.is_available():
         e1 = e1.cuda()
-        e2 = e2.cuda()
+        # e2 = e2.cuda()
         decoder = decoder.cuda()
         disc = disc.cuda()
 
         A_label = A_label.cuda()
         B_label = B_label.cuda()
-        B_separate = B_separate.cuda()
+        # B_separate = B_separate.cuda()
 
         mse = mse.cuda()
         bce = bce.cuda()
 
-    ae_params = list(e1.parameters()) + list(e2.parameters()) + list(decoder.parameters())
+    # ae_params = list(e1.parameters()) + list(e2.parameters()) + list(decoder.parameters())
+    ae_params = list(e1.parameters()) + list(decoder.parameters())
     ae_optimizer = optim.Adam(ae_params, lr=args.lr, betas=(0.5, 0.999))
 
     disc_params = disc.parameters()
@@ -65,10 +66,9 @@ def train(args):
 
     if args.load != '':
         save_file = os.path.join(args.load, 'checkpoint')
-        _iter = load_model(save_file, e1, e2, decoder, ae_optimizer, disc, disc_optimizer)
+        _iter = load_model(save_file, e1, decoder, ae_optimizer, disc, disc_optimizer)
 
     e1 = e1.train()
-    e2 = e2.train()
     decoder = decoder.train()
     disc = disc.train()
 
@@ -97,12 +97,10 @@ def train(args):
 
             ae_optimizer.zero_grad()
 
-            A_common = e1(domA_img)
-            A_separate = e2(domA_img)
-            A_encoding = torch.cat([A_common, A_separate], dim=1)
+            A_encoding = e1(domA_img)
 
-            B_common = e1(domB_img)
-            B_encoding = torch.cat([B_common, B_separate], dim=1)
+            B_encoding = e1(domB_img)
+            B_encoding[:, -marker:] = 0
 
             A_decoding = decoder(A_encoding)
             B_decoding = decoder(B_encoding)
@@ -110,9 +108,9 @@ def train(args):
             loss = mse(A_decoding, domA_img) + mse(B_decoding, domB_img)
 
             if args.discweight > 0:
-                preds_A = disc(A_common)
-                preds_B = disc(B_common)
-		loss_weight = min((float(_iter) / 500000), 1)
+                preds_A = disc(A_encoding[:, -marker:])
+                preds_B = disc(B_encoding[:, -marker:])
+                loss_weight = min((float(_iter) / 500000), 1)
                 loss += args.discweight * loss_weight * (bce(preds_A, B_label) + bce(preds_B, B_label))
 
             loss.backward()
@@ -122,11 +120,11 @@ def train(args):
             if args.discweight > 0:
                 disc_optimizer.zero_grad()
 
-                A_common = e1(domA_img)
-                B_common = e1(domB_img)
+                A_encoding = e1(domA_img)
+                B_encoding = e1(domB_img)
 
-                disc_A = disc(A_common)
-                disc_B = disc(B_common)
+                disc_A = disc(A_encoding[:, -marker:])
+                disc_B = disc(B_encoding[:, -marker:])
 
                 loss = bce(disc_A, A_label) + bce(disc_B, B_label)
 
@@ -139,18 +137,16 @@ def train(args):
 
             if _iter % args.display_iter == 0:
                 e1 = e1.eval()
-                e2 = e2.eval()
                 decoder = decoder.eval()
 
-                save_imgs(args, e1, e2, decoder, _iter)
+                save_imgs(args, e1, decoder, _iter, marker)
 
                 e1 = e1.train()
-                e2 = e2.train()
                 decoder = decoder.train()
 
             if _iter % args.save_iter == 0:
                 save_file = os.path.join(args.out, 'checkpoint')
-                save_model(save_file, e1, e2, decoder, ae_optimizer, disc, disc_optimizer, _iter)
+                save_model(save_file, e1, decoder, ae_optimizer, disc, disc_optimizer, _iter)
 
             _iter += 1
 
