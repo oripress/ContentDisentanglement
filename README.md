@@ -15,16 +15,6 @@ the left column are transferred to the people in the top row.
 We can also do this for people who already have glasses, i.e. we replace their glasses with another pair:
 <img src="images/gls_swap_clear.png" width="500px">
 
-If you found this work useful, please cite:
-@inproceedings{
-press2018emerging,
-title={Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer},
-author={Ori Press and Tomer Galanti and Sagie Benaim and Lior Wolf},
-booktitle={International Conference on Learning Representations},
-year={2019},
-url={https://openreview.net/forum?id=BylE1205Fm},
-}
-
 ## Prerequisites
 - Python 2.7 / 3.6
 - Pytorch 0.4
@@ -76,6 +66,19 @@ python train.py --root ./glasses_data --out ./glasses_experiment --load ./glasse
 Run ```eval.py```. You can use the following example to run:
 ```
 python eval.py --dataroot ./glasses_data --out ./glasses_eval --sep 25 --num_display 10
+```
+
+### Citation
+
+If you found this work useful, please cite:
+```@inproceedings{
+press2018emerging,
+title={Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer},
+author={Ori Press and Tomer Galanti and Sagie Benaim and Lior Wolf},
+booktitle={International Conference on Learning Representations},
+year={2019},
+url={https://openreview.net/forum?id=BylE1205Fm},
+}
 ```
 
 ### Acknowledgements
