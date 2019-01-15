@@ -3,12 +3,12 @@
 PyTorch implementation of "Emerging Disentanglement in Auto-Encoder Based Unsupervised Image Content Transfer" ([link](https://openreview.net/pdf?id=BylE1205Fm)).
 
 
-The network learns to disentangle image representations between a set and its subset. For example, given a set of people with glasses, and a set of people without, the network
+The network learns to disentangle image representations between a set and its subset. For example, given a set of faces, a subset of which have with glasses, the network
 learns to decompose a face representation into 2 parts: one that contains information about glasses and one that contains information about everything else.
 
-To accomplish this, we use two encoders: the first encoder encodes only information that has to do with the glasses in the picture, and the second encoder encodes information related to everything else. During training, we train the encoders and the decoder to reconstruct images of people with and without glasses. When we encode an image of a person without glasses, we just don't use the first encoder. To ensure the encodings produced by the second encoder do not contain information about glasses, we use a discriminator that tries to predict whether an encoding came from an image of a person with or without glasses.
+To accomplish this, we train a network consisting of two encoders and one decoder on the autoendcoding objective. The first encoder only encodes information that has to do with the glasses in the picture, and the second encoder encodes information related to everything else. During training, we train the encoders and the decoder to reconstruct images of people with and without glasses. Then, to encode an image of a person with glasses, we run both encoders on that image and then concatenate their output. When we encode an image of a person without glasses, we just don't use the first encoder, and instead concatenate a vector of zeros to the output of the second decoder. To ensure the encodings produced by the second encoder do not contain information about glasses, we use a discriminator that tries to predict whether an encoding came from an image of a person with or without glasses.
 
-We can then transfer one person's glasses to many different people. In the image below, the glasses from the people in
+With a trained model, we can then transfer one person's glasses to different people. In the image below, the glasses from the people in
 the left column are transferred to the people in the top row.
 <img src="images/gls_mat_clear.png" width="1200px">
 
