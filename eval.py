@@ -30,7 +30,7 @@ def eval(args):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataroot', default='')
+    parser.add_argument('--root', default='')
     parser.add_argument('--load', default='')
     parser.add_argument('--out', default='')
     parser.add_argument('--resize', type=int, default=128)
