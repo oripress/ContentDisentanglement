@@ -65,7 +65,7 @@ python train.py --root ./glasses_data --out ./glasses_experiment --load ./glasse
 ### To Evaluate
 Run ```eval.py```. You can use the following example to run:
 ```
-python eval.py --dataroot ./glasses_data --out ./glasses_eval --sep 25 --num_display 10
+python eval.py --data ./glasses_data --out ./glasses_eval --sep 25 --num_display 10
 ```
 
 ### Citation
