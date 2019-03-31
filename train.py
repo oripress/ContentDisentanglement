@@ -23,12 +23,12 @@ def train(args):
         transforms.CenterCrop(args.crop),
         transforms.Resize(args.resize),
         transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        # transforms.ToTensor(),
+        # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
-    domA_train = CustomDataset(os.path.join(args.root, 'trainA.txt'), transform=comp_transform)
-    domB_train = CustomDataset(os.path.join(args.root, 'trainB.txt'), transform=comp_transform)
+    domA_train = CustomDataset(os.path.join(args.root, 'trainA.txt'), transform=comp_transform, elastic=True)
+    domB_train = CustomDataset(os.path.join(args.root, 'trainB.txt'), transform=comp_transform, elastic=True)
 
     A_label = torch.full((args.bs,), 1)
     B_label = torch.full((args.bs,), 0)
@@ -73,9 +73,9 @@ def train(args):
     print('Started training...')
     while True:
         domA_loader = torch.utils.data.DataLoader(domA_train, batch_size=args.bs,
-                                                  shuffle=True, num_workers=6)
+                                                  shuffle=True, num_workers=0)
         domB_loader = torch.utils.data.DataLoader(domB_train, batch_size=args.bs,
-                                                  shuffle=True, num_workers=6)
+                                                  shuffle=True, num_workers=0)
         if _iter >= args.iters:
             break
 
@@ -83,15 +83,22 @@ def train(args):
             if domA_img.size(0) != args.bs or domB_img.size(0) != args.bs:
                 break
 
+            domA_img, true_domA = domA_img
             domA_img = Variable(domA_img)
+            domB_img, true_domB = Variable(domB_img)
             domB_img = Variable(domB_img)
 
             if torch.cuda.is_available():
                 domA_img = domA_img.cuda()
                 domB_img = domB_img.cuda()
+                true_domA = true_domA.cuda()
+                true_domB = true_domB.cuda()
 
             domA_img = domA_img.view((-1, 3, args.resize, args.resize))
             domB_img = domB_img.view((-1, 3, args.resize, args.resize))
+
+            true_domA = true_domA.view((-1, 3, args.resize, args.resize))
+            true_domB = true_domB.view((-1, 3, args.resize, args.resize))
 
             ae_optimizer.zero_grad()
 
@@ -102,10 +109,10 @@ def train(args):
             B_common = e1(domB_img)
             B_encoding = torch.cat([B_common, B_separate], dim=1)
 
-            A_decoding = decoder(A_encoding)
-            B_decoding = decoder(B_encoding)
+            A_decoding = decoder(A_encoding, domA_img)
+            B_decoding = decoder(B_encoding, domB_img)
 
-            loss = mse(A_decoding, domA_img) + mse(B_decoding, domB_img)
+            loss = mse(A_decoding, true_domA) + mse(B_decoding, true_domB)
 
             if args.discweight > 0:
                 preds_A = disc(A_common)
