@@ -80,7 +80,7 @@ def train(args):
             break
 
         for domA_img, domB_img in zip(domA_loader, domB_loader):
-            if domA_img.size(0) != args.bs or domB_img.size(0) != args.bs:
+            if domA_img[0].size(0) != args.bs or domB_img[0].size(0) != args.bs:
                 break
 
             domA_img, true_domA = domA_img
